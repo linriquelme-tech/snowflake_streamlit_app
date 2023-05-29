@@ -1,5 +1,6 @@
 import streamlit
 import pandas as pd
+import requests
 
 streamlit.title('My parents new healthy diner!');
 streamlit.header('Breakfast Menu');
@@ -15,3 +16,7 @@ my_fruit_list = my_fruit_list.set_index('Fruit');
 show_fruits = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado', 'Strawberries']);
 # Display the table on the page.
 streamlit.dataframe(my_fruit_list.loc[show_fruits]);
+
+streamlit.header("Fruit Advice!");
+f_response = requests.get("https://fruityvice.com/api/fruit/watermelon") # watermelon info
+streamlit.text(f_response.json());
