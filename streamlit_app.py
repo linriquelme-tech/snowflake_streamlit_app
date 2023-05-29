@@ -38,4 +38,4 @@ streamlit.dataframe(my_data_row);
 
 #add a fruit to list
 f_add = streamlit.text_input("What fruit would you like to add?");
-streamlit.text("Thanks for adding ",f_add);
+streamlit.text("Thanks for adding "+f_add);
