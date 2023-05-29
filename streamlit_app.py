@@ -19,4 +19,4 @@ streamlit.dataframe(my_fruit_list.loc[show_fruits]);
 
 streamlit.header("Fruit Advice!");
 f_response = requests.get("https://fruityvice.com/api/fruit/watermelon") # watermelon info
-streamlit.text(f_response.json());
+streamlit.dataframe(f_response.json());
