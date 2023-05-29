@@ -2,6 +2,7 @@ import streamlit
 import pandas as pd
 import requests
 import snowflake.connector
+import urllib.error import URLError
 
 streamlit.title('My parents new healthy diner!');
 streamlit.header('Breakfast Menu');
@@ -24,6 +25,9 @@ streamlit.text("The selected fruit is: {}".format(f_choice));
 f_response = requests.get("https://fruityvice.com/api/fruit/"+f_choice); # watermelon info
 
 streamlit.dataframe(pd.json_normalize(f_response.json()));
+streamlit.stop();
+
+
 
 
 #database (snowflake) connection
@@ -39,3 +43,4 @@ streamlit.dataframe(my_data_row);
 #add a fruit to list
 f_add = streamlit.text_input("What fruit would you like to add?");
 streamlit.text("Thanks for adding "+f_add);
+my_cur.execute("INSERT INTO fruit_load_list VALUES('"+f_add+"')")
