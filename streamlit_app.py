@@ -53,5 +53,7 @@ if streamlit.button('Get Fruit Load List'):
   streamlit.dataframe(my_data_rows);
 
 #add a fruit to list
-f_add = streamlit.text_input("What fruit would you like to add?");
-streamlit.text(insert_row_snowflake(f_add))
+if streamlit.button('Add a Fruit to the List'):
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"]);
+  f_add = streamlit.text_input("What fruit would you like to add?");
+  streamlit.text(insert_row_snowflake(f_add))
