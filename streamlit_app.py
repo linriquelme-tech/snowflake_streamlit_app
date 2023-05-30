@@ -20,6 +20,9 @@ show_fruits = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.inde
 streamlit.dataframe(my_fruit_list.loc[show_fruits]);
 
 streamlit.header("Fruit Advice!");
+def get_fruityvice_data(this_choice):
+  f_response = requests.get("https://fruityvice.com/api/fruit/"+this_choice);
+  return pd.json_normalize(f_response.json())
 try:
   f_choice = streamlit.text_input("What fruit would you like information about?");
   if not f_choice:
@@ -30,12 +33,6 @@ except URLError as e:
   streamlit.error();
 
 #database (snowflake) connection
-
-# FUNCTIONS
-def get_fruityvice_data(this_choice):
-  f_response = requests.get("https://fruityvice.com/api/fruit/"+this_choice);
-  return pd.json_normalize(f_response.json())
-
 def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
     #my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()");
