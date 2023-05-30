@@ -29,7 +29,7 @@ try:
   if not f_choice:
     streamlit.error("Please select a fruit to get information");
   else:
-    streamlit.dataframe(pd.json_normalize(get_fruityvice_data(f_choice)));
+    streamlit.dataframe(get_fruityvice_data(f_choice));
 except URLError as e:
   streamlit.error();
 
