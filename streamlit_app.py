@@ -4,6 +4,24 @@ import requests
 import snowflake.connector
 from urllib.error import URLError
 
+# FUNCTIONS
+def get_fruityvice_data(this_choice):
+  f_response = requests.get("https://fruityvice.com/api/fruit/"+this_choice);
+  return pd.json_normalize(f_response.json())
+
+def get_fruit_load_list():
+  with my_cnx.cursor() as my_cur:
+    #my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()");
+    my_cur.execute("SELECT * FROM fruit_load_list");
+    #my_data_row = my_cur.fetchone();
+    return my_cur.fetchall();
+  
+def insert_row_snowflake(new_fruit):
+  with my_cnx.cursor() as my_cur:
+    my_cur.execute("INSERT INTO fruit_load_list VALUES('from streamlit')")
+    return "Thanks for adding" + new_fruit;
+    
+
 streamlit.title('My parents new healthy diner!');
 streamlit.header('Breakfast Menu');
 streamlit.text('🥣 Omega 3 & Blueberry Oatmeal');
@@ -19,10 +37,6 @@ show_fruits = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.inde
 # Display the table on the page.
 streamlit.dataframe(my_fruit_list.loc[show_fruits]);
 
-def get_fruityvice_data(this_choice):
-  f_response = requests.get("https://fruityvice.com/api/fruit/"+this_choice);
-  return pd.json_normalize(f_response.json())
-
 streamlit.header("Fruit Advice!");
 try:
   f_choice = streamlit.text_input("What fruit would you like information about?");
@@ -33,14 +47,6 @@ try:
 except URLError as e:
   streamlit.error();
 
-
-def get_fruit_load_list():
-  with my_cnx.cursor() as my_cur:
-    #my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()");
-    my_cur.execute("SELECT * FROM fruit_load_list");
-    #my_data_row = my_cur.fetchone();
-    return my_cur.fetchall();
-
 streamlit.text("The fruit load list contains:");
 #database (snowflake) connection
 if streamlit.button('Get Fruit Load List'):
@@ -48,8 +54,6 @@ if streamlit.button('Get Fruit Load List'):
   my_data_rows = get_fruit_load_list();
   streamlit.dataframe(my_data_rows);
 
-streamlit.stop()
 #add a fruit to list
 f_add = streamlit.text_input("What fruit would you like to add?");
-streamlit.text("Thanks for adding "+f_add);
-my_cur.execute("INSERT INTO fruit_load_list VALUES('"+f_add+"')")
+streamlit.text(insert_row_snowflake(f_add))
